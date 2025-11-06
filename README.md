@@ -25,14 +25,14 @@ This project combines firmware and software for microcontrollers, backend servic
 
 The whole project is based on different components, split on several repositories
 
-| Component | Description                                                              |
-|-----------|--------------------------------------------------------------------------|
-| [iot-monitor-service](https://github.com/daemonzone/iot-monitor-service) | Node.js **monitoring and control service**, interacting with the backend |  
-| [iot-clients-esp32](https://github.com/daemonzone/iot-clients-esp32) | esp8266 / esp32 **C++ client sketches**                          |
-| [iot-clients-node](https://github.com/daemonzone/iot-clients-node) | **Node.js clients** for newer Raspberry/OrangePi devices                 | 
-|  [iot-clients-node-legacy](https://github.com/daemonzone/iot-clients-node-legacy) | Node.js clients for **older devices** (Armbian v3, mqtt4)                | 
-|  [iot-monitor-api](https://github.com/daemonzone/iot-monitor-api) | **API interface** to retrieve devices and telemetry from TimescaleDB     |
-|  [iot-monitor-dashboard](https://github.com/daemonzone/iot-monitor-dashboard) | React **Web Dashboard** for device charts                                |
+| Component                                                                            | Description                                                              |
+|--------------------------------------------------------------------------------------|--------------------------------------------------------------------------|
+| [iot-monitor-service](https://github.com/daemonzone/iot-monitor-service)             | Node.js **monitoring and control service**, interacting with the backend |  
+| [iot-clients-esp8266-esp32](https://github.com/daemonzone/iot-clients-esp8266-esp32) | esp8266 / esp32 **C++ client sketches**                          |
+| [iot-clients-node](https://github.com/daemonzone/iot-clients-node)                   | **Node.js clients** for newer Raspberry/OrangePi devices                 | 
+| [iot-clients-node-legacy](https://github.com/daemonzone/iot-clients-node-legacy)     | Node.js clients for **older devices** (Armbian v3, mqtt4)                | 
+| [iot-monitor-api](https://github.com/daemonzone/iot-monitor-api)                     | **API interface** to retrieve devices and telemetry from TimescaleDB     |
+| [iot-monitor-dashboard](https://github.com/daemonzone/iot-monitor-dashboard)         | React **Web Dashboard** for device charts                                |
 
 
 ### 🧠 Wemos / ESP32 Clients
