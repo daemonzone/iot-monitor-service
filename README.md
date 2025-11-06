@@ -91,6 +91,8 @@ A **Node.js service** responsible for:
    Copy .env.example to .env and fill in with Database and MQTT parameters:
 
    ```
+   MQTT_USER=mqtt_user
+   MQTT_PASS=mqtt_user  
    MQTT_BROKER_URL=mqtt://localhost
    DATABASE_URL=postgres://user:password@localhost/iot
    ```
