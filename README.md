@@ -2,6 +2,8 @@
 
 ## ⚙️ Overview
 
+This project combines firmware and software for microcontrollers, backend services, and monitoring tools.
+
 ### 🛰️ IoT Monitor Service
 
 A **Node.js service** responsible for:
@@ -11,11 +13,9 @@ A **Node.js service** responsible for:
 - Initializing database tables and hypertables
 - _Sending commands to devices (wip)_
 
-This project combines firmware and software for microcontrollers, backend services, and monitoring tools.
 
 ### Requirements / Tech Stack
 - **Node.js**,
-- **C++ (ESP32)**
 - **TimescaleDB**
 - **MQTT**
 
@@ -36,10 +36,10 @@ The whole project is based on different components, split on several repositorie
 
 
 ### 🧠 Wemos / ESP32 Clients
-For IoT nodes based on **ESP8266 / ESP32** microcontrollers (i.e Wemos D1 mini)
-Each device has its own unique identifier
-Each device announces itself on a MQTT queue, being identified by the monitoring service.
-Each device periodically publishes telemetry and status (e.g. temperature, humidity, status) to a per-device MQTT queue
+ - For IoT nodes based on **esp8266 / esp32** microcontrollers (i.e Wemos D1 mini)
+ - Each device has its own unique identifier
+ - Each device announces itself on a MQTT queue, being identified by the monitoring service.
+ - Each device periodically publishes telemetry and status (e.g. temperature, humidity, status) to a per-device MQTT queue
 
 ### 💻 NodeJs Clients
 Node.js based client code available for micro-computers (like Raspberry or Orange Pi)
@@ -53,7 +53,7 @@ A **Node.js service** responsible for:
   - Exposing REST endpoints to query device data and status  
 
 ### 🖥️ IoT Monitor Dashboard
-A **React Web Interface** to:
+**React Web Interface** to:
   - Visualize real-time device status and historical telemetry  
   - Display charts for temperature, humidity, uptime, and other metrics  
   - Filter, sort, and explore devices and their readings  
