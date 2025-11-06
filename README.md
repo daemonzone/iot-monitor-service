@@ -1,12 +1,23 @@
 # 🌐 IoT Monitor Service
 
-Monitor Service - An integrated system for managing and monitoring IoT devices, built with 
- - **Node.js**, 
- - **C++ (Arduino/ESP)**
- - **TimescaleDB**
- - **MQTT**
+## ⚙️ Overview
 
-This project combines firmware for microcontrollers, backend services, and monitoring tools.
+### 🛰️ IoT Monitor Service
+
+A **Node.js service** responsible for:
+- Identifying devices connected and allowed to send telemetry data
+- Receiving telemetry from devices
+- Persisting data into TimescaleDB
+- Initializing database tables and hypertables
+- _Sending commands to devices (wip)_
+
+This project combines firmware and software for microcontrollers, backend services, and monitoring tools.
+
+### Requirements / Tech Stack
+- **Node.js**,
+- **C++ (ESP32)**
+- **TimescaleDB**
+- **MQTT**
 
 ---
 
@@ -14,26 +25,15 @@ This project combines firmware for microcontrollers, backend services, and monit
 
 The whole project is based on different components, split on several repositories
 
-| Component | Description |
-|-----------|-------------|
+| Component | Description                                                              |
+|-----------|--------------------------------------------------------------------------|
 | [iot-monitor-service](https://github.com/daemonzone/iot-monitor-service) | Node.js **monitoring and control service**, interacting with the backend |  
-| [iot-clients-esp32](https://github.com/daemonzone/iot-clients-esp32) | **C++ client sketches** for Wemos / ESP32 |
-| [iot-clients-node](https://github.com/daemonzone/iot-clients-node) | **Node.js clients** for newer Raspberry/OrangePi devices | 
-|  [iot-clients-node-legacy](https://github.com/daemonzone/iot-clients-node-legacy) | Node.js clients for **older devices** (Armbian v3, mqtt4) | 
-|  [iot-monitor-api](https://github.com/daemonzone/iot-monitor-api) | **API interface** to retrieve devices and telemetry from TimescaleDB |
-|  [iot-monitor-dashboard](https://github.com/daemonzone/iot-monitor-dashboard) | React **Web Dashboard** for device charts |
+| [iot-clients-esp32](https://github.com/daemonzone/iot-clients-esp32) | esp8266 / esp32 **C++ client sketches**                          |
+| [iot-clients-node](https://github.com/daemonzone/iot-clients-node) | **Node.js clients** for newer Raspberry/OrangePi devices                 | 
+|  [iot-clients-node-legacy](https://github.com/daemonzone/iot-clients-node-legacy) | Node.js clients for **older devices** (Armbian v3, mqtt4)                | 
+|  [iot-monitor-api](https://github.com/daemonzone/iot-monitor-api) | **API interface** to retrieve devices and telemetry from TimescaleDB     |
+|  [iot-monitor-dashboard](https://github.com/daemonzone/iot-monitor-dashboard) | React **Web Dashboard** for device charts                                |
 
----
-
-## ⚙️ Overview
-
-### 🛰️ IoT Monitor Service
-A **Node.js service** responsible for:
-  - Identifying devices connected and allowed to send telemetry data
-  - Receiving telemetry from devices  
-  - Persisting data into TimescaleDB  
-  - Initializing database tables and hypertables  
-  - _Sending commands to devices (wip)_
 
 ### 🧠 Wemos / ESP32 Clients
 For IoT nodes based on **ESP8266 / ESP32** microcontrollers (i.e Wemos D1 mini)
@@ -62,13 +62,13 @@ A **React Web Interface** to:
 
 ## 🧰 Tech Stack
 
-| Component | Technology |
-|------------|-------------|
-| Firmware | C++ (Arduino, ESP-IDF) |
-| Backend / Monitor | Node.js |
-| Database | PostgreSQL + TimescaleDB |
-| Messaging | MQTT (HiveMQ / Mosquitto) |
-| Dashboard | Node.js client or web app |
+| Component | Technology             | Provider (with free plan) |
+|------------|------------------------|---------------------------|
+| Firmware | C++ (Arduino, ESP-IDF) | -                         |
+| Backend / Monitor | Node.js                | -                         |
+| Database | PostgreSQL + TimescaleDB | [Neon](https://neon.com/) | 
+| Messaging | MQTT / Mosquitto      | [HiveMQ](https://www.hivemq.com/) |
+| Dashboard | Node.js client or web app | -                         |
 
 ---
 
@@ -76,7 +76,7 @@ A **React Web Interface** to:
 
 1. Clone the repository
    ```bash
-   git clone https://github.com/daemonzone/iot-monitor.git
+   git clone https://github.com/daemonzone/iot-monitor-service.git
    cd iot-monitor-service
 
 2. Install **iot-monitor-service** dependencies
