@@ -22,7 +22,7 @@ export async function handleRegistration(payload) {
     DO UPDATE SET
       model = EXCLUDED.model,
       ip_addr = EXCLUDED.ip_addr,
-      image = EXCLUDED.image,      
+      image = COALESCE(EXCLUDED.image, devices.image),
       deleted = FALSE;
   `;
 
