@@ -8,7 +8,7 @@ const pool = new Pool({
 });
 
 export async function handleRegistration(payload) {
-  const { id, model, ip } = payload;
+  const { id, model, ip, image } = payload;
 
   if (!id || !model || !ip) {
     console.warn('Missing fields in registration payload:', payload);
@@ -16,16 +16,17 @@ export async function handleRegistration(payload) {
   }
 
   const query = `
-    INSERT INTO devices (device_id, model, ip_addr, last_status_update)
-    VALUES ($1, $2, $3, now())
+    INSERT INTO devices (device_id, model, ip_addr, last_status_update, image)
+    VALUES ($1, $2, $3, now(),$4)
     ON CONFLICT (device_id)
     DO UPDATE SET
       model = EXCLUDED.model,
       ip_addr = EXCLUDED.ip_addr,
+      image = EXCLUDED.image,      
       deleted = FALSE;
   `;
 
-  await pool.query(query, [id, model, ip]);
+  await pool.query(query, [id, model, ip, image]);
   console.log(`📦 Device registered: ${id}`);
 }
 
@@ -59,7 +60,7 @@ export async function handleStatus(payload) {
     await pool.query(query, values);
     console.log(`✅ Status stored for ${id} at ${timestamp}`);
   } catch (err) {
-    console.error("Error inserting status:", err);
+    console.error(`❌Error storing status for ${id}:`, err);
   }
 }
 
@@ -81,8 +82,8 @@ export async function setupActiveDevices(client, devices) {
         // Subscribe to its status topic
         const statusTopic = `devices/${deviceId}/status`;
         client.subscribe(statusTopic, (err) => {
-          if (err) console.error(`Failed to subscribe to ${statusTopic}:`, err);
-          else console.log(`Subscribed to ${statusTopic}`);
+          if (err) console.error(`❌Failed to subscribe to ${statusTopic}:`, err);
+          else console.log(`✅ Subscribed to ${statusTopic}`);
         });
       }
     });

@@ -28,15 +28,15 @@ const client = mqtt.connect(MQTT_BROKER, options);
 const devices = new Set();
 
 client.on('connect', async () => {
-  console.log('Connected to MQTT broker');
+  console.log('✅ Connected to MQTT broker');
 
   // Fetch all active devices and subscribe
   await setupActiveDevices(client, devices); // pass Set
 
   // Listen for new devices registering
   client.subscribe('devices/+/register', (err) => {
-    if (err) console.error('Subscribe error:', err);
-    else console.log('Subscribed to devices/+/register');
+    if (err) console.error('❌ Subscribe error:', err);
+    else console.log('✅ Subscribed to devices/+/register');
   });
 });
 
@@ -55,23 +55,39 @@ client.on('message', async (topic, message) => {
     try {
       const data = JSON.parse(payload);
 
+      const loggedPayload = JSON.parse(payload);
+      if (loggedPayload.image) loggedPayload.image = '[base64 image omitted]';
+      console.log(`✅ Registered payload received: ${JSON.stringify(loggedPayload)}`);
+
       if (!devices.has(deviceId)) {
         devices.add(deviceId);
 
-        await handleRegistration(data);
-
         client.subscribe(`devices/${deviceId}/status`, (err) => {
-          if (err) console.error('Subscribe error:', err);
-          else console.log(`Subscribed to devices/${deviceId}/status`);
+          if (err) console.error('❌ Subscribe error:', err);
+          else console.log(`✅ Subscribed to devices/${deviceId}/status`);
         });
-
-        // Clear retained registration
-        client.publish(topic, "", { retain: true }, (err) => {
-          if (err) console.error(`Failed to clear retained message on ${topic}:`, err);
-        });
-
-        await setupActiveDevices(client, devices);
       }
+
+      await handleRegistration(data);
+
+      // Clear retained registration
+      client.publish(topic, "", { retain: true }, (err) => {
+        if (err) console.error(`Failed to clear retained message on ${topic}:`, err);
+      });
+
+      await setupActiveDevices(client, devices);      
+
+      // Enable to clear retained messages from register queues
+/*
+      devices.forEach(device => {
+        console.log("Cleaning register queue for device", device)
+        const topic = `devices/${device}/register`;
+        client.publish(topic, '', { retain: true }, (err) => {
+          if (err) console.error(`❌ Failed to clear retained message on ${topic}:`, err);
+          else console.log(`✅ Cleared retained message on ${topic}`);
+        });
+      });        
+*/
     } catch (e) {
       console.error(`Invalid JSON on ${topic}:`, payload, e);
     }
