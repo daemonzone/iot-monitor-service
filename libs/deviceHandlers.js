@@ -8,7 +8,7 @@ const pool = new Pool({
 });
 
 export async function handleRegistration(payload) {
-  const { id, model, ip, image } = payload;
+  const { id, model, ip, sensors, image } = payload;
 
   if (!id || !model || !ip) {
     console.warn('Missing fields in registration payload:', payload);
@@ -16,23 +16,24 @@ export async function handleRegistration(payload) {
   }
 
   const query = `
-    INSERT INTO devices (device_id, model, ip_addr, last_status_update, image)
-    VALUES ($1, $2, $3, now(),$4)
+    INSERT INTO devices (device_id, model, ip_addr, last_status_update, sensors, image)
+    VALUES ($1, $2, $3, now(), $4, $5)
     ON CONFLICT (device_id)
     DO UPDATE SET
       model = EXCLUDED.model,
       ip_addr = EXCLUDED.ip_addr,
+      sensors = EXCLUDED.sensors,
       image = COALESCE(EXCLUDED.image, devices.image),
       deleted = FALSE;
   `;
 
-  await pool.query(query, [id, model, ip, image]);
+  await pool.query(query, [id, model, ip, sensors, image]);
   console.log(`📦 Device registered: ${id}`);
 }
 
 
 export async function handleStatus(payload) {
-  const { id, status, led, ip, uptime, timestamp, temperature, humidity } = payload;
+  const { id, ip, uptime, timestamp, sensors_data } = payload;
 
   if (!id) {
     console.warn("Missing device ID in status payload:", payload);
@@ -41,19 +42,17 @@ export async function handleStatus(payload) {
 
   const query = `
     INSERT INTO devices_readings
-      (device_id, ip_addr, uptime, led, device_reading_timestamp, temperature, humidity)
+      (device_id, ip_addr, uptime, device_reading_timestamp, sensors_data)
     VALUES
-      ($1, $2, $3, $4, $5, $6, $7);
+      ($1, $2, $3, $4, $5);
   `;
 
   const values = [
     id,
     ip,
     uptime || null,
-    led === "ON", // convert string to boolean
     timestamp,
-    temperature || null,
-    humidity || null
+    sensors_data
   ];
 
   try {
