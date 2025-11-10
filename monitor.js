@@ -4,7 +4,7 @@ import pg from 'pg';
 import pkg from 'pg';
 const { Pool } = pg;
 
-import { handleRegistration, handleStatus, setupActiveDevices } from './libs/deviceHandlers.js';
+import { handleRegistration, handleStatus, setupActiveDevices } from './utils/deviceHandlers.js';
 
 // TimescaleDB configuration from environment
 const pool = new Pool({
