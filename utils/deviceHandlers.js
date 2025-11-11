@@ -27,7 +27,7 @@ export async function handleRegistration(payload) {
       deleted = FALSE;
   `;
 
-  await pool.query(query, [id, model, ip, sensors, image]);
+  await pool.query(query, [id, model, ip, JSON.stringify(payload.sensors), image]);
   console.log(`📦 Device registered: ${id}`);
 }
 

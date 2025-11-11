@@ -8,9 +8,12 @@ CREATE TABLE sensors (
 
 CREATE UNIQUE INDEX idx_sensors_code ON sensors(code);
 
-ALTER TABLE devices ADD COLUMN sensors VARCHAR;
+ALTER TABLE devices ADD COLUMN sensors JSONB;
 
--- ALTER TABLE devices_readings DROP COLUMN led, temperature, humidity;
+ALTER TABLE devices_readings DROP COLUMN led;
+ALTER TABLE devices_readings DROP COLUMN temperature;
+ALTER TABLE devices_readings DROP COLUMN humidity;
+
 ALTER TABLE devices_readings ADD COLUMN sensors_data JSONB;
 
 INSERT INTO sensors (code, name, unit) VALUES
