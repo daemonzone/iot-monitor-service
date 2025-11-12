@@ -7,6 +7,8 @@ const { Pool } = pg;
 import { handleRegistration, handleStatus, setupActiveDevices } from './utils/deviceHandlers.js';
 import { updateHeartbeat } from './utils/monitorHeartbeat.js';
 
+const HEARTBEAT_TTL = 60; // seconds
+
 // MQTT configuration from environment
 const MQTT_BROKER = process.env.MQTT_BROKER;
 const MQTT_USER = process.env.MQTT_USER;
@@ -35,7 +37,7 @@ client.on('connect', async () => {
   });
 
   updateHeartbeat(client);
-  setInterval(() => updateHeartbeat(client), 60 * 1000);
+  setInterval(() => updateHeartbeat(client), HEARTBEAT_TTL * 1000);
 });
 
 // ---------------------------------------------------
