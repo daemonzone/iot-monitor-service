@@ -8,12 +8,10 @@ import { handleRegistration, handleStatus, setupActiveDevices } from './utils/de
 
 // Create a server that does nothing but bind the port (required to deploy it as a free Webservice on Render)
 import http from "http";
-const PORT = process.env.PORT || 3000;
-require("http")
-  .createServer(() => {})
-  .listen(PORT, () => {
-    console.log(`Monitor Service listening on port ${PORT}`);
-  });
+const PORT = process.env.PORT || 4000;
+http.createServer(() => {}).listen(PORT, () => {
+  console.log(`Monitor Service listening on port ${PORT}`);
+});
 
 // TimescaleDB configuration from environment
 const pool = new Pool({
