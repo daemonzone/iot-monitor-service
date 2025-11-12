@@ -5,19 +5,7 @@ import pkg from 'pg';
 const { Pool } = pg;
 
 import { handleRegistration, handleStatus, setupActiveDevices } from './utils/deviceHandlers.js';
-
-// Create a server that does nothing but bind the port (required to deploy it as a free Webservice on Render)
-import http from "http";
-const PORT = process.env.PORT || 4000;
-http.createServer(() => {}).listen(PORT, () => {
-  console.log(`Monitor Service listening on port ${PORT}`);
-});
-
-// TimescaleDB configuration from environment
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
-});
+import { updateHeartbeat } from './utils/monitorHeartbeat.js';
 
 // MQTT configuration from environment
 const MQTT_BROKER = process.env.MQTT_BROKER;
@@ -45,6 +33,9 @@ client.on('connect', async () => {
     if (err) console.error('❌ Subscribe error:', err);
     else console.log('✅ Subscribed to devices/+/register');
   });
+
+  updateHeartbeat(client);
+  setInterval(() => updateHeartbeat(client), 60 * 1000);
 });
 
 // ---------------------------------------------------
