@@ -43,7 +43,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Trigger: run after every insert on devices_readings
-CREATE TRIGGER trg_update_device_status
+CREATE OR REPLACE TRIGGER trg_update_device_status
 AFTER INSERT ON devices_readings
 FOR EACH ROW
 EXECUTE FUNCTION update_device_status();
