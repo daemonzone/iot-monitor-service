@@ -5,6 +5,7 @@ import pkg from 'pg';
 const { Pool } = pg;
 
 import { handleRegistration, handleStatus, setupActiveDevices } from './utils/deviceHandlers.js';
+import { sendWebsocketUpdate } from './utils/websocketUtils.js';
 import { updateHeartbeat } from './utils/monitorHeartbeat.js';
 
 const HEARTBEAT_TTL = 60; // seconds
@@ -102,8 +103,9 @@ client.on('message', async (topic, message) => {
 
     try {
       const data = JSON.parse(payload);
-      console.log(`📡 Status from ${deviceId}:`, JSON.stringify(data));
+      // console.log(`📡 Status from ${deviceId}:`, JSON.stringify(data));
       await handleStatus(data);
+      sendWebsocketUpdate(client, data);
     } catch (e) {
       console.error(`Invalid JSON on ${topic}:`, payload, e);
     }
