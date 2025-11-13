@@ -14,8 +14,8 @@ export function sendWebsocketUpdate(client, data) {
 
  	try {
     client.publish(websocket_topic, JSON.stringify(data), { retain: false }, (err) => {
-      if (err) console.error(`Failed to send message on ${topic}:`, err);
-      else console.log("📡 Status broadcasted to", websocket_topic);
+      if (err) console.error(`${data.timestamp} - Failed to send message on ${topic}:`, err);
+      else console.log(`📡 ${data.timestamp} - Status broadcasted to`, websocket_topic);
     });
 	} catch (e) {
     console.error('Error sending update:', e);
