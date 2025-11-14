@@ -57,15 +57,18 @@ CREATE TABLE sensors (
     code VARCHAR UNIQUE NOT NULL,
     name VARCHAR NOT NULL,
     unit VARCHAR,
-    value_type VARCHAR DEFAULT 'numeric' -- optional: numeric, boolean, string
+    value_type VARCHAR DEFAULT 'numeric', -- optional: numeric, boolean, string
+    icon VARCHAR
 );
 
 CREATE UNIQUE INDEX idx_sensors_code ON sensors(code);
 
-INSERT INTO sensors (code, name, unit, value_type) VALUES
-  ('temperature', 'Temperature', '°C', 'numeric'),
-  ('humidity', 'Humidity', '%', 'numeric'),
-  ('led', 'LED State', NULL, 'boolean'),
-  ('cpu_temperature', 'CPU Temperature', '°C', 'numeric'),
-  ('co2', 'CO₂', 'ppm', 'numeric');
+INSERT INTO sensors (code, name, unit, value_type, icon) VALUES
+('temperature', 'Temperature', '°C', 'numeric', 'FiThermometer'),
+('humidity', 'Humidity', '%', 'numeric', 'FiDroplet'),
+('led', 'LED State', NULL, 'boolean', 'FiSun'),
+('cpu_temperature', 'CPU Temperature', '°C', 'numeric', 'FiCpu'),
+('co2', 'CO₂', 'ppm', 'numeric', 'FiCloud'),
+('pressure', 'Pressure', 'kPA', 'numeric', 'FiSunset'),
+('coordinates', 'GPS', NULL, 'string', 'FiMapPin');
 
