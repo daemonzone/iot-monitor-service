@@ -4,7 +4,7 @@ import pg from 'pg';
 import pkg from 'pg';
 const { Pool } = pg;
 
-import { handleRegistration, handleStatus, setupActiveDevices } from './utils/deviceHandlers.js';
+import { DeviceService } from './services/deviceService.js';
 import { sendWebsocketUpdate } from './utils/websocketUtils.js';
 import { updateHeartbeat } from './utils/monitorHeartbeat.js';
 
@@ -23,19 +23,24 @@ const options = {
 };
 
 const client = mqtt.connect(MQTT_BROKER, options);
+const deviceService = new DeviceService();
 const devices = new Set();
+const sensors_offsets = {};
 
 client.on('connect', async () => {
   console.log('✅ Connected to MQTT broker');
 
   // Fetch all active devices and subscribe
-  await setupActiveDevices(client, devices); // pass Set
+  await deviceService.setupActiveDevices(client, devices); // pass Set
 
   // Listen for new devices registering
   client.subscribe('devices/+/register', (err) => {
     if (err) console.error('❌ Subscribe error:', err);
     else console.log('✅ Subscribed to devices/+/register');
   });
+
+  await deviceService.loadSensorsOffsets();
+  setInterval(() => { deviceService.loadSensorsOffsets() }, HEARTBEAT_TTL * 1000);
 
   updateHeartbeat(client);
   setInterval(() => updateHeartbeat(client), HEARTBEAT_TTL * 1000);
@@ -69,14 +74,14 @@ client.on('message', async (topic, message) => {
         });
       }
 
-      await handleRegistration(data);
+      await deviceService.handleRegistration(data);
 
       // Clear retained registration
       client.publish(topic, "", { retain: true }, (err) => {
         if (err) console.error(`Failed to clear retained message on ${topic}:`, err);
       });
 
-      await setupActiveDevices(client, devices);      
+      await deviceService.setupActiveDevices(client, devices);      
 
       // Enable to clear retained messages from register queues
 /*
@@ -104,7 +109,7 @@ client.on('message', async (topic, message) => {
     try {
       const data = JSON.parse(payload);
       // console.log(`📡 Status from ${deviceId}:`, JSON.stringify(data));
-      await handleStatus(data);
+      await deviceService.handleStatus(data);
       sendWebsocketUpdate(client, data);
     } catch (e) {
       console.error(`Invalid JSON on ${topic}:`, payload, e);

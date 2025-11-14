@@ -53,7 +53,7 @@ EXECUTE FUNCTION update_device_status();
 
 -- Sensors table
 CREATE TABLE sensors (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     code VARCHAR UNIQUE NOT NULL,
     name VARCHAR NOT NULL,
     unit VARCHAR,
@@ -71,4 +71,14 @@ INSERT INTO sensors (code, name, unit, value_type, icon) VALUES
 ('co2', 'CO₂', 'ppm', 'numeric', 'FiCloud'),
 ('pressure', 'Pressure', 'kPA', 'numeric', 'FiSunset'),
 ('coordinates', 'GPS', NULL, 'string', 'FiMapPin');
+
+-- Sensors table
+CREATE TABLE sensors_offsets (
+    id BIGSERIAL PRIMARY KEY,
+    device_id TEXT NOT NULL,
+    code VARCHAR NOT NULL,
+    offset FLOAT
+);
+
+CREATE UNIQUE INDEX idx_sensors_offsets_device_id_code ON sensors_offsets(device_id, code);
 
