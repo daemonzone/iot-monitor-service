@@ -9,6 +9,7 @@ export async function updateHeartbeat(mqttClient) {
       JSON.stringify({ last_heartbeat_timestamp: timestamp }),
       { retain: false }
     );
+    console.info("Monitor heartbeat sent:", Date.now());
   } catch (err) {
     console.error("Failed to update heartbeat:", err);
   }

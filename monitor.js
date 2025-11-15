@@ -43,7 +43,7 @@ client.on('connect', async () => {
   setInterval(() => { deviceService.loadSensorsOffsets() }, HEARTBEAT_TTL * 1000);
 
   updateHeartbeat(client);
-  setInterval(() => updateHeartbeat(client), HEARTBEAT_TTL * 1000);
+  setInterval(() => updateHeartbeat(client), (HEARTBEAT_TTL - 10) * 1000);
 });
 
 // ---------------------------------------------------
