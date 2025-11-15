@@ -9,6 +9,10 @@ export class DeviceService {
       ssl: { rejectUnauthorized: false }
     });
 
+    this.pool.on("error", (err) => {
+      console.error("❌ PG Pool Error:", err.code, err.message);
+    });
+
     // Optional caches
     this.sensorsOffsets = {};
     this.activeDevices = new Set();
